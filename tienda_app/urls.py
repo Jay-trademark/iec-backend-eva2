@@ -37,7 +37,6 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', views.pagina_inicio, name='home'),
     path('app_backend/', include('app_backend.urls')),
 
