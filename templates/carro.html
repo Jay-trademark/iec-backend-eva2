@@ -1,0 +1,184 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Hardware - Carrito</title>
+
+<!-- Bootswatch -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/superhero/bootstrap.min.css">
+<!-- Iconos -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        .cart-card {
+            border: 1px solid #4e5d6c;
+            border-radius: 6px;
+            overflow: hidden;
+            background-color: #2b3e50;
+        }
+        .cart-header {
+            background-color: #324c63;
+            border-bottom: 1px solid #4e5d6c;
+            padding: 12px 20px;
+        }
+        .cart-item-row {
+            border-bottom: 1px solid #4e5d6c;
+            padding: 20px;
+            background-color: #2b3e50;
+        }
+        .thumb-box {
+            width: 100px;
+            height: 70px;
+            background-color: #4e5d6c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b4bcc2;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+        .cart-subfooter {
+            background-color: #243342;
+            border-bottom: 1px solid #4e5d6c;
+            padding: 15px 20px;
+        }
+        .cart-footer-total {
+            background-color: #1a252f;
+            padding: 18px 20px;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100 bg-dark text-light">
+
+<!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold fst-italic text-uppercase"  href='./index.html'>
+                <i class="bi text-warning me-2"></i>Tienda Hardware
+            </a>
+            <div class="ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="./index.html"> Volver a la Tienda</a>
+                </li>
+                                <li class="nav-item">
+                    <a class="nav-link" href="./login.html"> Iniciar Sesión</a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+<!-- Carrito Main -->
+    <main class="container my-auto py-4" style="max-width: 900px;">
+        <div class="card cart-card shadow-lg">
+            
+<!-- Carrito superior -->
+            <div class="cart-header d-flex justify-content-between align-items-center">
+                <h5 class="m-0 text-info fw-bold">
+                    <i class="bi me-2"></i>Carrito de Compras
+                </h5>
+                <a href="./index.html" class="btn btn-primary btn-sm px-3">
+                    <i class="bi bi-arrow-left me-1"></i>Seguir Comprando
+                </a>
+            </div>
+
+<!-- Lista items -->
+            <div id="cart-items-container">
+                
+                {% for item in carro.items.all %}
+                <div class="cart-item-row d-flex align-items-center flex-wrap gap-3">
+                    <div class="thumb-box flex-shrink-0">
+                        100 x 70
+                    </div>
+
+<!-- Detalle -->
+                    <div class="flex-grow-1">
+                        <h5 class="fw-bold text-light mb-1">{{ item.producto.nombre }}</h5>
+                        <p class="text-muted small mb-0">{{ item.producto.descripcion|default:"Componente de alto rendimiento" }}</p>
+                    </div>
+
+<!-- Precio + Editar -->
+                    <div class="d-flex align-items-center gap-2 ms-auto">
+                        <span class="fs-5 text-light fw-semibold me-2">${{ item.producto.precio_unitario }} x</span>
+                        <input type="number" 
+                               class="form-control form-control-sm text-center bg-dark text-light border-secondary" 
+                               value="{{ item.cantidad }}" 
+                               min="1" 
+                               style="width: 65px;" 
+                               id="cant-{{ item.id }}">
+                        <button class="btn btn-link text-info p-1 ms-2" onclick="eliminarItem('{{ item.id }}')" title="Eliminar ítem">
+                            <i class="bi bi-trash fs-5"></i>
+                        </button>
+                    </div>
+                </div>
+                {% empty %}
+<!-- Item 1 -->
+                <div class="cart-item-row d-flex align-items-center flex-wrap gap-3">
+                    <div class="thumb-box flex-shrink-0">100 x 70</div>
+                    <div class="flex-grow-1">
+                        <h5 class="fw-bold text-light mb-1">Procesador AMD Ryzen 7 7800X3D</h5>
+                        <p class="text-muted small mb-0">8 núcleos / 16 hilos - Socket AM5</p>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 ms-auto">
+                        <span class="fs-5 text-light fw-semibold me-2">449.99 x</span>
+                        <input type="number" class="form-control form-control-sm text-center bg-dark text-light border-secondary" value="1" min="1" style="width: 65px;">
+                        <button class="btn btn-link text-info p-1 ms-2" title="Eliminar ítem"><i class="bi bi-trash fs-5"></i></button>
+                    </div>
+                </div>
+
+<!-- Item 2 -->
+                <div class="cart-item-row d-flex align-items-center flex-wrap gap-3">
+                    <div class="thumb-box flex-shrink-0">100 x 70</div>
+                    <div class="flex-grow-1">
+                        <h5 class="fw-bold text-light mb-1">Memoria RAM DDR5 32GB (2x16GB) 6000MHz</h5>
+                        <p class="text-muted small mb-0">Kit Dual Channel RGB</p>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 ms-auto">
+                        <span class="fs-5 text-light fw-semibold me-2">129.99 x</span>
+                        <input type="number" class="form-control form-control-sm text-center bg-dark text-light border-secondary" value="1" min="1" style="width: 65px;">
+                        <button class="btn btn-link text-info p-1 ms-2" title="Eliminar ítem"><i class="bi bi-trash fs-5"></i></button>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+
+<!-- Actualizar -->
+            <div class="cart-subfooter d-flex justify-content-end align-items-center gap-3">
+                <span class="text-muted small">¿Modificaste las cantidades?</span>
+                <button type="button" class="btn btn-outline-light btn-sm px-3" onclick="actualizarCarro()">
+                    Actualizar Carro
+                </button>
+            </div>
+
+<!-- Total y Checkout -->
+            <div class="cart-footer-total d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="fs-4 text-light">Total</span>
+                    <span class="fs-3 fw-bold text-warning" id="cart-total">${{ total|default:"579.98" }}</span>
+                </div>
+                <button type="button" class="btn btn-success btn-lg px-4 fw-bold" onclick="procesarCheckout()">
+                    Checkout
+                </button>
+            </div>
+        </div>
+    </main>
+
+<!-- Pie -->
+    <footer class="bg-dark text-light border-top border-secondary mt-auto py-3">
+        <div class="container text-center">
+            <p class="small text-muted mb-0">
+                <strong>Javiera Inostroza Staub</strong>
+                <strong>IEC-N4</strong>
+                <strong>Oct, 2026.</strong>
+            </p>
+        </div>
+    </footer>
+
+<!-- Scripts DRF -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/carro.js' %}"></script>
+</body>
+</html>
